@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+    dockerapp:
+        container_name: realit
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "3500:8080"
+            - "3502:8081"
