@@ -12,7 +12,14 @@ namespace TestWebService_RealIT
 
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json").Build();
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            var root = Directory.GetCurrentDirectory();
+            var secretsPath = Path.Combine(root, "secrets.json");
+            SecretsManager.Load(secretsPath);
+
+            builder.Configuration.AddEnvironmentVariables();
 
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<MockService>();
