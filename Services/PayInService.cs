@@ -40,16 +40,41 @@ namespace TestWebService_RealIT.Services
                 }
                 var paymentDetails = response?.data?.paymentDetailsData;
                 _logger.LogInformation($@"Payment details: 
-                    nameMediator: {paymentDetails.nameMediator},
+                    nameMediator: {MaskString(paymentDetails.nameMediator, 4)},
                     paymentMethod: {paymentDetails.paymentMethod},
                     bankName: {paymentDetails?.bankName},
-                    number: {paymentDetails.number},
-                    numberAdditional: {(!string.IsNullOrEmpty(paymentDetails.numberAdditional) ? paymentDetails.numberAdditional : "none")},
-                    qRcode: {(!string.IsNullOrEmpty(paymentDetails.qRCode) ? paymentDetails.qRCode : "none")}");
+                    number: {MaskString(paymentDetails?.number, 12)},
+                    numberAdditional: {MaskString(paymentDetails?.numberAdditional, 6)},
+                    qRcode: {(!string.IsNullOrEmpty(paymentDetails.qRCode) ? paymentDetails.qRCode : "not set")}");
             }
             catch (Exception ex) {
                 _logger.LogError(ex.ToString());
             }
         }
+
+        /// <summary>
+        /// маскировка данных строки
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string MaskString(string input, int charactersToMask) { 
+            if(string.IsNullOrEmpty(input)) return "not set";
+
+            string maskedString = "";
+            if (charactersToMask >= input.Length)
+            {
+                // If n is greater than or equal to the string length, replace the entire string
+                maskedString = new string('*', input.Length);
+                
+            }
+            else
+            {
+                string maskedPart = new string('*', charactersToMask);
+                string remainingPart = input.Substring(charactersToMask);
+                maskedString = maskedPart + remainingPart;               
+            }
+            return maskedString;
+        }
+
     }
 }
