@@ -45,7 +45,7 @@ namespace TestWebService_RealIT.Services
                     bankName: {paymentDetails?.bankName},
                     number: {MaskString(paymentDetails?.number, 12)},
                     numberAdditional: {MaskString(paymentDetails?.numberAdditional, 6)},
-                    qRcode: {(!string.IsNullOrEmpty(paymentDetails.qRCode) ? paymentDetails.qRCode : "not set")}");
+                    qRcode: {MaskString(paymentDetails?.qRCode, 6)}");
             }
             catch (Exception ex) {
                 _logger.LogError(ex.ToString());
@@ -63,9 +63,7 @@ namespace TestWebService_RealIT.Services
             string maskedString = "";
             if (charactersToMask >= input.Length)
             {
-                // If n is greater than or equal to the string length, replace the entire string
-                maskedString = new string('*', input.Length);
-                
+                maskedString = new string('*', input.Length);            
             }
             else
             {
